@@ -289,7 +289,7 @@ target = (base / filename).resolve()
 
 if not target.is_relative_to(base):
     raise ValueError("Invalid path")
-
+---
 So the logic is:
 Raw path:
  /var/www/images/../../../etc/passwd
@@ -300,10 +300,12 @@ Real location:
 Is it still inside /var/www/images?
               ↓
 No → reject
+---
 ```
 ```
 - Use least-privilege filesystem permissions
 Even if a path traversal vulnerability exists, the web application should not be able to read everything on the server.
+```
 ```
 Bad setup:
 Web application process
@@ -311,7 +313,6 @@ Web application process
 ```
 ```
 Better setup:
-
 Web application process
 → can read /var/www/images/
 → cannot read /root/
