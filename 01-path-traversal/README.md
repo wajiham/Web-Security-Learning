@@ -289,6 +289,7 @@ target = (base / filename).resolve()
 
 if not target.is_relative_to(base):
     raise ValueError("Invalid path")
+```
 ```text
 So the logic is:
 Raw path:
