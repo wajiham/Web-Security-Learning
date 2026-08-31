@@ -108,6 +108,11 @@ or double encoded as:
 
 ```text
 %252e%252e%252f
+
+decoded as:
+%252e → %2e → .
+%252e → %2e → .
+%252f → %2f → /
 ```
 
 **Why it can work:** different parts of the application may decode input at different stages.
@@ -203,11 +208,45 @@ The impact depends on the permissions of the web application.
 Developers should:
 
 - Avoid using user-controlled input directly as filesystem paths
+  Bad:
+  filename = request.args["filename"]
+  open("/var/www/images/" + filename)
+
+  Safer:
+  file_id = request.args["id"]
+  filename = lookup_filename(file_id)
+  open("/var/www/images/" + filename)
+  The user supplies an ID, not a raw path.
+
 - Prefer internal file IDs or allowlists
+  Instead of:
+  /download?filename=report.pdf
+  use:
+  /download?id=42
+
+  Server-side:
+  files = {
+    "42": "report.pdf",
+    "43": "invoice.pdf"
+  }
+  Only known files can be selected.
+
+  An allowlist could also be:
+  allowed = ["logo.png", "banner.png", "avatar.png"]
+  if filename not in allowed:
+  reject()
+  
 - Decode and normalize input before validation
 - Resolve the final canonical path
 - Verify the resolved path stays inside the intended directory
 - Use least-privilege filesystem permissions
+
+Below is an example of some simple Java code to validate the canonical path of a file based on user input:
+
+File file = new File(BASE_DIRECTORY, userInput);
+if (file.getCanonicalPath().startsWith(BASE_DIRECTORY)) {
+    // process file
+}
 
 ---
 
