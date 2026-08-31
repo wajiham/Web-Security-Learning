@@ -108,8 +108,9 @@ or double encoded as:
 
 ```text
 %252e%252e%252f
-
-decoded as:
+```
+```
+Decoded as:
 %252e → %2e → .
 %252e → %2e → .
 %252f → %2f → /
@@ -243,17 +244,79 @@ use:
   reject()
   ```
 - Decode and normalize input before validation
-- Resolve the final canonical path
-- Verify the resolved path stays inside the intended directory
+ ```
+An attacker may send encoded traversal:
+%2e%2e%2f
+which becomes:
+../
+So the application should not validate only the encoded form.
+
+Conceptually:
+decoded = url_decode(user_input)
+normalized = normalize_path(decoded)
+validate(normalized)
+
+The important idea is:
+decode first
+→ normalize
+→ validate the final form
+ ```
+- Resolve the final canonical path and verify that the resolved path stays inside the intended directory
+ ```
+A path such as:
+/var/www/images/../config.txt
+
+looks different from:
+/var/www/config.txt
+
+but they may refer to the same file.
+ ```
+ ```
+Canonicalization resolves things such as:
+.
+..
+duplicate slashes
+symbolic links
+```
+```
+Example in Python:
+
+from pathlib import Path
+from pathlib import Path
+
+base = Path("/var/www/images").resolve()
+target = (base / filename).resolve()
+
+if not target.is_relative_to(base):
+    raise ValueError("Invalid path")
+
+So the logic is:
+Raw path:
+ /var/www/images/../../../etc/passwd
+              ↓ resolve()
+Real location:
+ /etc/passwd
+              ↓
+Is it still inside /var/www/images?
+              ↓
+No → reject
+```
+```
 - Use least-privilege filesystem permissions
+Even if a path traversal vulnerability exists, the web application should not be able to read everything on the server.
+```
+Bad setup:
+Web application process
+→ can read almost all system files
+```
+```
+Better setup:
 
-Below is an example of some simple Java code to validate the canonical path of a file based on user input:
-
-File file = new File(BASE_DIRECTORY, userInput);
-if (file.getCanonicalPath().startsWith(BASE_DIRECTORY)) {
-    // process file
-}
-
+Web application process
+→ can read /var/www/images/
+→ cannot read /root/
+→ cannot read sensitive database configuration
+```
 ---
 
 ## Key Takeaway
