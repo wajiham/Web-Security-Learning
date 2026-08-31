@@ -208,15 +208,15 @@ The impact depends on the permissions of the web application.
 Developers should:
 
 - Avoid using user-controlled input directly as filesystem paths
-  Bad:
+ ``` Bad:
   filename = request.args["filename"]
   open("/var/www/images/" + filename)
-
-  Safer:
+```
+ ``` Safer:
   file_id = request.args["id"]
   filename = lookup_filename(file_id)
   open("/var/www/images/" + filename)
-  The user supplies an ID, not a raw path.
+  The user supplies an ID, not a raw path. ```
 
 - Prefer internal file IDs or allowlists
   Instead of:
