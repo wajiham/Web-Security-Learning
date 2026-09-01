@@ -58,9 +58,10 @@ def my_account():
 
     account = get_account_by_id(requested_id)
     return render_template("account.html", account=account)
-
+```text
 This prevents a user from changing the id parameter to access another user's account.
 ```
+
 ### 2. Ensure passwords are stored as one-way hashes and never exposed through application responses
 
 ## Key Takeaway
