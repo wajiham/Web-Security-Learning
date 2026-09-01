@@ -48,6 +48,14 @@ A normal user may be able to grant themselves administrative privileges and perf
 
 Store role and privilege information in trusted server-side session state. Never rely on an unsigned or otherwise user-controlled cookie, hidden field, or query parameter for authorization decisions.
 
+```python
+current_user = get_authenticated_user()
+
+if current_user.role != "admin":
+    return "Forbidden", 403
+```
+Here, current_user.role should come from a trusted server-side source such as the database or a securely validated server-side session, not from a value the user can edit in the browser.
+
 ## Key Takeaway
 
 Authentication data and authorization data are not the same thing. Even an authenticated session is insecure if the server trusts client-controlled role values.
