@@ -10,7 +10,7 @@ The application exposes sensitive administrative functionality at a discoverable
 
 ## Analysis
 
-This lab demonstrates a broken access control condition where the application relies on weak or missing authorization checks. The goal is to identify the trust boundary, manipulate the relevant request or identifier, and confirm that the server permits an action that should be restricted.
+This lab demonstrates a broken access control condition where the application relies on weak/missing authorization checks. The goal is to identify the trust boundary, manipulate the relevant request and confirm that the server permits an action that should be restricted.
 
 ## Exploitation Steps
 
@@ -27,11 +27,11 @@ The application assumes that hiding the admin link is enough. Because the endpoi
 
 ## Security Impact
 
-An attacker can reach privileged administrative functionality, potentially allowing account deletion, data modification, user management, or complete application compromise.
+An attacker can reach privileged administrative functionality, potentially allowing account deletion, data modification, user management or complete application compromise.
 
 ## Remediation
 
-Protect every privileged endpoint with server-side authorization checks. Do not rely on hidden links, uncommon paths, or `robots.txt` for protection.
+Protect every privileged endpoint with server-side authorization checks. Do not rely on hidden links, uncommon paths or `robots.txt` for protection.
 
 ## Key Takeaway
 
