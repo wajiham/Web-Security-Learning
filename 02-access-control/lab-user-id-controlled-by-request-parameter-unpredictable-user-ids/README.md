@@ -11,7 +11,7 @@ The application uses unpredictable user IDs, but it does not properly verify tha
 ## Exploitation Steps
 
 1. Find a blog post written by `carlos`.
-2. Open the author's profile or inspect the related request.
+2. Open the author's profile and Inspect the related request using BurpSuite.
 3. Observe that the request contains Carlos's user ID.
 
 ![Carlos's unpredictable user ID disclosed by the blog functionality](./images/01-carlos-user-id-from-blog.png)
