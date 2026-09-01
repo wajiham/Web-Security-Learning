@@ -34,6 +34,13 @@ An authenticated user may access sensitive information belonging to another user
 
 For every object request, verify on the server that the authenticated user is authorized to access that specific object. Unpredictable IDs can reduce guessability but must not replace access control.
 
+The secure flow is:
+---
+The server checks the authenticated session to determine who is logged in.
+The server reads the requested object ID.
+The server checks whether that object belongs to the logged-in user, or whether the user has permission to access it.
+Only then does it return the data.
+---
 ## Key Takeaway
 
 A GUID or random identifier is not an authorization mechanism. If the application leaks the identifier anywhere, broken object-level authorization can still be exploited.
