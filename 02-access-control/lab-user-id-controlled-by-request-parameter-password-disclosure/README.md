@@ -43,9 +43,24 @@ The application fails to enforce object-level authorization on account pages and
 
 A normal user can compromise a privileged account, resulting in full vertical privilege escalation and access to administrative functionality.
 
-## Remediation
+## Illustrative Remediation Example
+### 1. Enforce server-side ownership checks (verify authentication-session cookies)
 
-Enforce ownership checks on every account request and never return plaintext or recoverable passwords to the client. Passwords should be securely hashed and should never be retrievable from an account page.
+```python
+@app.route("/my-account")
+def my_account():
+    current_user = get_authenticated_user()
+    requested_id = request.args.get("id")
+
+    if requested_id != current_user.id:
+        return "Forbidden", 403
+
+    account = get_account_by_id(requested_id)
+    return render_template("account.html", account=account)
+
+This prevents a user from changing the id parameter to access another user's account.
+
+**2. Ensure passwords are stored as one-way hashes and never exposed through application responses.**
 
 ## Key Takeaway
 
