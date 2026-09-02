@@ -17,6 +17,7 @@ The goal is to build a structured record of:
 - [Path Traversal](./01-path-traversal/)
 - [Access Control](./02-access-control/)
 - [Authentication](./03-authentication/)
+
 More topics will be added as I progress.
 
 ## Learning Resources
